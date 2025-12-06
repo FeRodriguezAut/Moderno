@@ -165,4 +165,30 @@ document.addEventListener('DOMContentLoaded', () => {
             resultadoDiv.style.display = 'block';
         });
     }
+
+    // EJERCICIO 7: Registro dinámico de productos
+    const form7 = document.getElementById('form-ejercicio7');
+    if (form7) {
+        form7.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const productosInput = document.getElementById('productos7').value;
+            const resultadoDiv = document.getElementById('resultado7');
+
+            // Convertir la cadena de entrada a un array de productos, eliminando espacios y filtrando vacíos
+            const productosArray = productosInput.split(',')
+                                                .map(p => p.trim())
+                                                .filter(p => p !== '');
+            
+            // Llamar a la función principal de lógica para registrar productos
+            const productosUnicos = registrarProductos(...productosArray); // Usar spread para pasar como rest parameters
+
+            // Mostrar el resultado en la interfaz
+            if (productosUnicos.length > 0) {
+                resultadoDiv.textContent = `Productos registrados (sin duplicados): ${productosUnicos.join(', ')}`;
+            } else {
+                resultadoDiv.textContent = 'No se registraron productos.';
+            }
+            resultadoDiv.style.display = 'block';
+        });
+    }
 });

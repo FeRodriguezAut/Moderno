@@ -7,3 +7,4 @@ export { calcularPromedio } from './ejercicio3.js';
 export { ordenarYEncontrarExtremos } from './ejercicio4.js';
 export { validarUsuario } from './ejercicio5.js';
 export { calcularNomina } from './ejercicio 6.js';
+export { registrarProductos } from './ejercicio7.js';
