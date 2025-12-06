@@ -1,21 +1,15 @@
-// Enunciado analítico:
-// Una tienda en línea requiere conocer el inventario actualizado de un producto. Se debe calcular el inventario final según la cantidad inicial, las unidades vendidas y las unidades recibidas en reposición. Además, se debe identificar si el inventario queda en estado crítico.
-// ... (mismos requerimientos y salidas)
-
-/**
-}
- */
+// Script para el cálculo de inventario.
 function solicitarNumeroValido(mensaje) {
   let numero;
   while (true) {
     const entrada = prompt(mensaje);
     numero = parseInt(entrada);
 
-    // Verificamos si la entrada NO es un número O si es un número negativo.
+    // Validación de entrada numérica.
     if (isNaN(numero) || numero < 0) {
       alert("Error: Por favor, ingrese un número válido y positivo.");
     } else {
-      // Si el número es válido, rompemos el bucle.
+      // Ruptura de bucle para número válido.
       break;
     }
   }
@@ -23,21 +17,21 @@ function solicitarNumeroValido(mensaje) {
 }
 
 function calcularInventario() {
-  // 1. Entradas solicitadas por el programa (usando la nueva función con bucle)
+  // 1. Solicitud de entradas.
   const cantidadInicial = solicitarNumeroValido("Ingrese la cantidad inicial del inventario:");
   const cantidadVendida = solicitarNumeroValido("Ingrese la cantidad de unidades vendidas:");
   const cantidadRecibida = solicitarNumeroValido("Ingrese la cantidad de unidades recibidas en reposición:");
 
-  // 2. Validar que las ventas no superen el stock
+  // 2. Validación de ventas vs stock.
   if (cantidadVendida > cantidadInicial + cantidadRecibida) {
     alert("Error: No se pueden vender más unidades de las que hay en existencia.");
     return;
   }
 
-  // 3. Usar operadores matemáticos para calcular el inventario final
+  // 3. Cálculo de inventario final.
   const inventarioFinal = cantidadInicial - cantidadVendida + cantidadRecibida;
 
-  // 4. Indicar si el inventario es crítico
+  // 4. Determinación de estado crítico.
   let estadoInventario;
   if (inventarioFinal < 5) {
     estadoInventario = "Inventario crítico";
@@ -45,9 +39,9 @@ function calcularInventario() {
     estadoInventario = "Inventario estable";
   }
 
-  // 5. Salidas
+  // 5. Presentación de resultados.
   alert(`El inventario final es de: ${inventarioFinal} unidades.\nEstado: ${estadoInventario}`);
 }
 
-// Llamamos a la función para que se ejecute
+// Ejecución de la función principal.
 calcularInventario();

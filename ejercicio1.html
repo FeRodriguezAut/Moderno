@@ -30,47 +30,45 @@
 
         <div class="explanation-section">
             <h2>Explicación Técnica</h2>
-            <h3>Entradas:</h3>
+            <h4>Entradas:</h4>
             <ul>
-                <li><strong>Lista de Aprendices:</strong> Una cadena de texto donde los nombres de los aprendices están separados por comas (e.g., "Ana, Juan, Pedro").</li>
-                <li><strong>Nombre a Buscar:</strong> Una cadena de texto que representa el nombre del aprendiz que se quiere verificar.</li>
+                <li>Lista de Aprendices</li>
+                <li>Nombre a Buscar</li>
             </ul>
 
             <h3>Proceso:</h3>
             <ol>
-                <li>La lista de aprendices ingresada se convierte en un arreglo de nombres.</li>
-                <li>Tanto los nombres de la lista como el nombre a buscar se "normalizan" (se eliminan espacios extra y se convierten a minúsculas) para asegurar una comparación sin errores de formato.</li>
-                <li>Se verifica si el nombre normalizado a buscar existe dentro de la lista de nombres normalizados.</li>
+                <li>Conversión a arreglo de nombres.</li>
+                <li>Normalización de nombres para comparación.</li>
+                <li>Verificación de existencia.</li>
             </ol>
 
             <h3>Salidas:</h3>
             <ul>
-                <li>Un mensaje indicando si el aprendiz <strong>está presente</strong> o <strong>no está presente</strong> en la lista, mostrado en la sección de resultados.</li>
+                <li>Mensaje de presencia/ausencia.</li>
             </ul>
 
             <h3>Reglas de Negocio:</h3>
             <ul>
-                <li>La búsqueda no distingue entre mayúsculas y minúsculas (ej: "juan" es igual a "Juan").</li>
-                <li>Los espacios al inicio o al final de los nombres se ignoran (ej: " Juan " es igual a "Juan").</li>
-                <li>Los nombres en la lista deben estar separados por comas.</li>
+                <li>Búsqueda insensible a mayúsculas/minúsculas.</li>
+                <li>Ignora espacios iniciales/finales.</li>
+                <li>Nombres separados por comas.</li>
             </ul>
 
             <h3>Casos Límite:</h3>
             <ul>
-                <li><strong>Lista vacía:</strong> Si no se ingresa ningún aprendiz, siempre indicará que el nombre no está presente.</li>
-                <li><strong>Nombre a buscar vacío:</strong> Si no se ingresa un nombre a buscar, siempre indicará que no está presente.</li>
-                <li><strong>Nombres con solo espacios:</strong> Si un nombre en la lista es "   " o el nombre a buscar es "   ", se tratará como un nombre vacío y no se encontrará.</li>
+                <li>Lista vacía.</li>
+                <li>Nombre a buscar vacío.</li>
+                <li>Nombres con solo espacios.</li>
             </ul>
 
             <h3>Decisiones de Diseño Justificadas:</h3>
             <ol>
                 <li>
-                    <strong>Normalización de Entradas (`trim()` y `toLowerCase()`):</strong>
-                    <p><strong>Por qué se usó:</strong> Se normalizan tanto el nombre a buscar como los nombres en la lista para evitar errores de validación por mayúsculas/minúsculas o espacios en blanco accidentales. Esto hace la búsqueda más robusta y amigable para el usuario.</p>
+                    Normalización de Entradas.
                 </li>
                 <li>
-                    <strong>Uso del método `includes()` para la verificación:</strong>
-                    <p><strong>Por qué se usó:</strong> Para este caso, solo necesitamos saber si el elemento existe (un booleano), no su posición o el elemento en sí. `includes()` es el método más directo y legible para esta tarea, en comparación con `find()` (que devolvería el elemento) o `filter()` (que crearía un nuevo arreglo). Su rendimiento es óptimo para una simple comprobación de existencia.</p>
+                    Uso de `includes()` para verificación.
                 </li>
             </ol>
         </div>
@@ -79,25 +77,24 @@
     <script type="module">
         import { verificarAsistencia } from './Ejercicio1.js';
 
-        // Cuando la página se carga completamente
+        // Carga completa de la página.
         document.addEventListener('DOMContentLoaded', () => {
             const inputAprendices = document.getElementById('inputAprendices');
             const inputNombreBuscar = document.getElementById('inputNombreBuscar');
             const btnVerificar = document.getElementById('btnVerificar');
             const resultadoDiv = document.getElementById('resultado');
 
-            // Esta función se encarga de recolectar los datos, llamar a la lógica y mostrar el resultado.
-            // Se diseñó para ser el punto de unión entre la interfaz de usuario y la lógica de negocio.
+            // Función de verificación principal.
             const ejecutarVerificacion = () => {
                 const aprendicesStr = inputAprendices.value;
-                // Los aprendices se dividen por coma y se limpian de espacios.
+                // Procesamiento de lista de aprendices.
                 const aprendicesArray = aprendicesStr.split(',').map(nombre => nombre.trim()).filter(nombre => nombre !== '');
                 const nombreBuscar = inputNombreBuscar.value;
 
-                // Se llama a la función principal de lógica para verificar la asistencia.
+                // Llamada a función de verificación.
                 const estaPresente = verificarAsistencia(aprendicesArray, nombreBuscar);
 
-                // Se muestra el resultado de manera clara en la interfaz.
+                // Muestra el resultado.
                 if (estaPresente) {
                     resultadoDiv.textContent = `¡Sí! "${nombreBuscar}" está presente en la lista.`;
                     resultadoDiv.style.color = 'green';
@@ -107,10 +104,10 @@
                 }
             };
 
-            // Se añade un "escuchador de eventos" al botón para que ejecute la función cuando se haga clic.
+            // Event listener para el botón.
             btnVerificar.addEventListener('click', ejecutarVerificacion);
 
-            // Ejecutar la verificación inicial con los valores predeterminados al cargar la página.
+            // Verificación inicial.
             ejecutarVerificacion();
         });
     </script>

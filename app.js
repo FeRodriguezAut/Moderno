@@ -1,4 +1,4 @@
-// Importar las funciones de los módulos de ejercicios desde el archivo barril.
+// Importación de funciones desde modules.js.
 import { 
     verificarAsistencia,
     calcularInventario,
@@ -9,11 +9,11 @@ import {
 } from './modules.js';
 
 
-// --- LÓGICA PRINCIPAL ---
+// Lógica principal de la aplicación.
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- LÓGICA DE NAVEGACIÓN ---
+    // Lógica de navegación.
     const navLinks = document.querySelectorAll('nav a');
     const sections = document.querySelectorAll('.ejercicio');
 
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     showSection(window.location.hash);
 
-    // --- LÓGICA DE EJERCICIOS ---
+    // Lógica para el manejo de ejercicios.
 
     // EJERCICIO 1
     const form1 = document.getElementById('form-ejercicio1');
@@ -146,15 +146,15 @@ document.addEventListener('DOMContentLoaded', () => {
         form6.addEventListener('submit', (event) => {
             event.preventDefault();
 
-            // 1. ENTRADA
+            // Manejo de entrada.
             const valorHora = parseFloat(document.getElementById('valorHora6').value);
             const horasTrabajadas = parseInt(document.getElementById('horasTrabajadas6').value, 10);
             const resultadoDiv = document.getElementById('resultado6');
 
-            // 2. PROCESO
+            // Procesamiento de datos.
             const resultado = calcularNomina(valorHora, horasTrabajadas);
 
-            // 3. SALIDA
+            // Visualización de salida.
             if (resultado.error) {
                 resultadoDiv.textContent = resultado.error;
             } else {
@@ -174,15 +174,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const productosInput = document.getElementById('productos7').value;
             const resultadoDiv = document.getElementById('resultado7');
 
-            // Convertir la cadena de entrada a un array de productos, eliminando espacios y filtrando vacíos
+            // Conversión de cadena a array de productos.
             const productosArray = productosInput.split(',')
                                                 .map(p => p.trim())
                                                 .filter(p => p !== '');
             
-            // Llamar a la función principal de lógica para registrar productos
+            // Llamada a función de registro de productos.
             const productosUnicos = registrarProductos(...productosArray); // Usar spread para pasar como rest parameters
 
-            // Mostrar el resultado en la interfaz
+            // Mostrar resultados en la interfaz.
             if (productosUnicos.length > 0) {
                 resultadoDiv.textContent = `Productos registrados (sin duplicados): ${productosUnicos.join(', ')}`;
             } else {
@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // EJERCICIO 8: Búsqueda avanzada en un catálogo
     const form8 = document.getElementById('form-ejercicio8');
     if (form8) {
-        // Catálogo de cursos predefinido para el ejercicio 8
+        // Catálogo de cursos.
         const miCatalogo = [
             { nombre: "Introducción a JS", categoria: "Programación", duracion: 10, etiquetas: ["frontend", "web"] },
             { nombre: "Diseño UX/UI", categoria: "Diseño", duracion: 25, etiquetas: ["usabilidad", "interfaz"] },
@@ -208,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
 
         const catalogoDisplayDiv = document.getElementById('catalogoDisplay8');
-        // Mostrar el catálogo inicial
+        // Visualización del catálogo inicial.
         const displayCatalogo = (catalogo) => {
             catalogoDisplayDiv.textContent = JSON.stringify(catalogo, null, 2);
         };
@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let callbackBusqueda;
             let errorMensaje = '';
 
-            // Construcción dinámica del callback de búsqueda
+            // Construcción de callback de búsqueda.
             switch (criterioTipo) {
                 case 'categoria':
                     if (criterioValor) {
@@ -255,10 +255,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 resultadoDiv.textContent = `Error: ${errorMensaje}`;
                 resultadoDiv.style.color = 'red';
             } else {
-                // Llamar a la función principal de lógica para buscar cursos
+                // Llamada a función de búsqueda de cursos.
                 const cursosFiltrados = buscarCursos(miCatalogo, callbackBusqueda);
 
-                // Mostrar el resultado en la interfaz
+                // Mostrar resultados en la interfaz.
                 if (cursosFiltrados.length > 0) {
                     const formattedResults = cursosFiltrados.map(curso => `- ${curso.nombre} (${curso.categoria}, ${curso.duracion}h)`).join('\n');
                     resultadoDiv.innerHTML = `<strong>Cursos encontrados:</strong><pre>${formattedResults}</pre>`;
@@ -269,6 +269,89 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             resultadoDiv.style.display = 'block';
+        });
+    }
+
+    // EJERCICIO 9: Procesamiento de pagos.
+    const form9 = document.getElementById('form-ejercicio9');
+    if (form9) {
+        // Datos de pagos.
+        const misPagos = [
+            { id: 'P001', monto: 120, moneda: 'USD', estado: 'completado' },
+            { id: 'P002', monto: 80, moneda: 'USD', estado: 'pendiente' },
+            { id: 'P003', monto: 250, moneda: 'COP', estado: 'completado' },
+            { id: 'P004', monto: 50, moneda: 'USD', estado: 'completado' },
+            { id: 'P005', monto: 180, moneda: 'COP', estado: 'pendiente' },
+            { id: 'P006', monto: 300, moneda: 'USD', estado: 'completado' },
+            { id: 'P007', monto: 90, moneda: 'COP', estado: 'completado' },
+        ];
+
+        const pagosDisplayDiv = document.getElementById('pagosDisplay9');
+        const displayPagos = (pagos) => {
+            pagosDisplayDiv.textContent = JSON.stringify(pagos, null, 2);
+        };
+        displayPagos(misPagos); // Visualización de pagos iniciales.
+
+        form9.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const reglaTipo = document.getElementById('reglaTipo9').value;
+            const reglaValor = document.getElementById('reglaValor9').value.trim();
+            const resultadoAprobadosDiv = document.getElementById('resultadoAprobados9');
+            const resultadoRechazadosDiv = document.getElementById('resultadoRechazados9');
+
+            let reglaAprobacionCallback;
+            let errorMensaje = '';
+
+            switch (reglaTipo) {
+                case 'montoMinimo':
+                    const montoMin = parseFloat(reglaValor);
+                    if (!isNaN(montoMin) && montoMin >= 0) {
+                        reglaAprobacionCallback = pago => pago.monto >= montoMin && pago.estado === 'completado';
+                    } else {
+                        errorMensaje = "Ingresa un monto mínimo válido (número positivo).";
+                    }
+                    break;
+                case 'monedaEspecifica':
+                    if (reglaValor) {
+                        reglaAprobacionCallback = pago => pago.moneda.toLowerCase() === reglaValor.toLowerCase() && pago.estado === 'completado';
+                    } else {
+                        errorMensaje = "Ingresa una moneda para la regla.";
+                    }
+                    break;
+                case 'estadoCompletado':
+                    reglaAprobacionCallback = pago => pago.estado === 'completado';
+                    break;
+                default:
+                    errorMensaje = "Tipo de regla no reconocido.";
+            }
+
+            if (errorMensaje) {
+                resultadoAprobadosDiv.textContent = `Error: ${errorMensaje}`;
+                resultadoAprobadosDiv.style.color = 'red';
+                resultadoRechazadosDiv.textContent = '';
+            } else {
+                const { aprobados, rechazados } = procesarPagos(misPagos, reglaAprobacionCallback);
+
+                if (aprobados.length > 0) {
+                    const formattedAprobados = aprobados.map(p => `- ${p.id}: $${p.monto} ${p.moneda} (${p.estado})`).join('\n');
+                    resultadoAprobadosDiv.innerHTML = `<strong>Pagos Aprobados:</strong><pre>${formattedAprobados}</pre>`;
+                    resultadoAprobadosDiv.style.color = 'green';
+                } else {
+                    resultadoAprobadosDiv.textContent = 'No hay pagos aprobados.';
+                    resultadoAprobadosDiv.style.color = 'orange';
+                }
+
+                if (rechazados.length > 0) {
+                    const formattedRechazados = rechazados.map(p => `- ${p.id}: $${p.monto} ${p.moneda} (${p.estado})`).join('\n');
+                    resultadoRechazadosDiv.innerHTML = `<strong>Pagos Rechazados:</strong><pre>${formattedRechazados}</pre>`;
+                    resultadoRechazadosDiv.style.color = 'red';
+                } else {
+                    resultadoRechazadosDiv.textContent = 'No hay pagos rechazados.';
+                    resultadoRechazadosDiv.style.color = 'green';
+                }
+            }
+            resultadoAprobadosDiv.style.display = 'block';
+            resultadoRechazadosDiv.style.display = 'block';
         });
     }
 });
