@@ -3,13 +3,307 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ejecicios JavaScript</title>
+    <title>Taller de Lógica de Programación con JavaScript</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Ejercicios de JavaScript</h1>
-    
+    <header>
+        <h1>Taller de Lógica de Programación con JavaScript</h1>
+        <nav>
+            <ul>
+                <li><a href="#ejercicio1">Ejercicio 1</a></li>
+                <li><a href="#ejercicio2">Ejercicio 2</a></li>
+                <li><a href="#ejercicio3">Ejercicio 3</a></li>
+                <li><a href="#ejercicio4">Ejercicio 4</a></li>
+                <li><a href="#ejercicio5">Ejercicio 5</a></li>
+                <li><a href="#ejercicio6">Ejercicio 6</a></li>
+            </ul>
+        </nav>
+    </header>
 
-    <!-- Puedes cambiar 'Ejercicio1.js' por 'Ejecicio2.js' para probar el otro script -->
-    <script src="ejercicio5.js"></script>
+    <main>
+        <section id="ejercicio1" class="ejercicio">
+            <h2>Ejercicio 1: Validación de Asistencia</h2>
+            <form id="form-ejercicio1">
+                <div>
+                    <label for="aprendices1">Lista de aprendices (separados por coma):</label>
+                    <input type="text" id="aprendices1" name="aprendices1" placeholder="Ej: Ana,Juan,Pedro" required>
+                </div>
+                <div>
+                    <label for="nombre1">Nombre a validar:</label>
+                    <input type="text" id="nombre1" name="nombre1" required>
+                </div>
+                <button type="submit">Verificar Asistencia</button>
+            </form>
+            <div id="resultado1" class="resultado" style="display:none;"></div>
+            <details>
+                <summary>Ver Documentación Técnica</summary>
+                <div>
+                    <h4>Entradas</h4>
+                    <ul>
+                        <li><strong>Lista de aprendices:</strong> Un texto con nombres separados por comas (ej: "Ana,Juan,Pedro").</li>
+                        <li><strong>Nombre a validar:</strong> Un texto con el nombre a buscar en la lista.</li>
+                    </ul>
+                    <h4>Proceso</h4>
+                    <p>La función toma la lista de aprendices, la convierte en un arreglo y normaliza cada nombre (quita espacios y convierte a minúsculas). Hace lo mismo con el nombre a validar. Luego, comprueba si el nombre normalizado está incluido en la lista de aprendices normalizada.</p>
+                    <h4>Salidas</h4>
+                    <p>Un mensaje indicando si el aprendiz "SÍ" o "NO" está inscrito.</p>
+                    <h4>Reglas de Negocio y Casos Límite</h4>
+                    <ul>
+                        <li><strong>Búsqueda Flexible:</strong> La validación no distingue entre mayúsculas y minúsculas y es tolerante a espacios extra al inicio o final de los nombres.</li>
+                        <li><strong>Campos Requeridos:</strong> El formulario no se puede enviar con campos vacíos.</li>
+                    </ul>
+                </div>
+            </details>
+        </section>
+
+        <section id="ejercicio2" class="ejercicio">
+            <h2>Ejercicio 2: Actualización de Inventario</h2>
+            <form id="form-ejercicio2">
+                <div>
+                    <label for="inicial2">Cantidad inicial:</label>
+                    <input type="number" id="inicial2" name="inicial2" min="0" required>
+                </div>
+                <div>
+                    <label for="vendida2">Cantidad vendida:</label>
+                    <input type="number" id="vendida2" name="vendida2" min="0" required>
+                </div>
+                <div>
+                    <label for="recibida2">Cantidad recibida (reposición):</label>
+                    <input type="number" id="recibida2" name="recibida2" min="0" required>
+                </div>
+                <button type="submit">Calcular Inventario</button>
+            </form>
+            <div id="resultado2" class="resultado" style="display:none;"></div>
+            <details>
+                <summary>Ver Documentación Técnica</summary>
+                <div>
+                    <h4>Entradas</h4>
+                    <ul>
+                        <li><strong>Cantidad inicial:</strong> Número entero positivo.</li>
+                        <li><strong>Cantidad vendida:</strong> Número entero positivo.</li>
+                        <li><strong>Cantidad recibida (reposición):</strong> Número entero positivo.</li>
+                    </ul>
+                    <h4>Proceso</h4>
+                    <p>El inventario final se calcula con la fórmula: <code>inicial - vendida + recibida</code>. Antes del cálculo, se valida que ninguna entrada sea negativa y que la cantidad vendida no supere el total de existencias (inicial + recibida).</p>
+                    <h4>Salidas</h4>
+                    <p>Un mensaje con el inventario final y su estado ("Inventario crítico" si es menor a 5, o "Inventario estable"). Si hay un error de validación, se muestra un mensaje descriptivo.</p>
+                    <h4>Reglas de Negocio y Casos Límite</h4>
+                    <ul>
+                        <li><strong>Entradas no negativas:</strong> La función rechaza cualquier valor negativo en las entradas.</li>
+                        <li><strong>Consistencia de Stock:</strong> No se puede vender más de lo que hay. La función valida que <code>vendida <= inicial</code> (antes de la reposición). *Corrección: la lógica real es más flexible y comprueba contra el stock total disponible.*</li>
+                                                    <li><strong>Inventario Crítico:</strong> Se considera crítico un inventario final con menos de 5 unidades.</li>
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <h4>Decisiones de Diseño Justificadas:</h4>
+                                                <ol>
+                                                    <li>
+                                                        <strong>Validación de Entradas Negativas:</strong>
+                                                        <p><strong>Por qué se usó:</strong> Se asegura que ninguna cantidad de entrada (inicial, vendida, recibida) sea negativa, ya que no tienen sentido en un contexto de inventario real. Esto garantiza la integridad del cálculo y previene resultados ilógicos.</p>
+                                                    </li>
+                                                    <li>
+                                                        <strong>Validación de Coherencia del Stock:</strong>
+                                                        <p><strong>Por qué se usó:</strong> Es una regla de negocio crucial que la cantidad vendida no puede superar el stock total disponible (cantidad inicial + cantidad recibida). Esta validación evita estados de inventario negativos que no reflejan la realidad y proporciona un mensaje de error claro al usuario.</p>
+                                                    </li>
+                                                </ol>
+                                            </div>
+                                        </details>        </section>
+
+        <section id="ejercicio3" class="ejercicio">
+            <h2>Ejercicio 3: Análisis de Calificaciones</h2>
+            <form id="form-ejercicio3">
+                <div>
+                    <label for="notas3">Lista de notas (separadas por coma):</label>
+                    <input type="text" id="notas3" name="notas3" placeholder="Ej: 5,4.5,3.8" required>
+                </div>
+                <button type="submit">Calcular Promedio</button>
+            </form>
+            <div id="resultado3" class="resultado" style="display:none;"></div>
+            <details>
+                <summary>Ver Documentación Técnica</summary>
+                <div>
+                    <h4>Entradas</h4>
+                    <ul>
+                        <li><strong>Lista de notas:</strong> Un texto con notas numéricas entre 0 y 5, separadas por comas (ej: "5, 4.5, 3.8").</li>
+                    </ul>
+                    <h4>Proceso</h4>
+                    <p>El texto de entrada se convierte en un arreglo de números. Se valida que cada nota sea un número válido entre 0 y 5. Luego, se suman todas las notas y se dividen por la cantidad de notas para obtener el promedio.</p>
+                    <h4>Salidas</h4>
+                    <p>Un mensaje con el promedio final (formateado a 2 decimales) y el nivel de rendimiento correspondiente ("Alto", "Medio" o "Bajo").</p>
+                    <h4>Reglas de Negocio y Casos Límite</h4>
+                    <ul>
+                        <li><strong>Rango de Notas:</strong> Solo se aceptan notas entre 0 y 5. Cualquier valor fuera de este rango genera un error.</li>
+                        <li><strong>Entradas no numéricas:</strong> Si se incluye un valor que no es un número, se reporta un error.</li>
+                        <li><strong>Lista Vacía:</strong> Si no se ingresan notas, se muestra un mensaje indicándolo en lugar de producir un error.</li>
+                                                    <li><strong>Clasificación de Rendimiento:</strong> Alto (&gt;= 4.0), Medio (&gt;= 3.0), Bajo (&lt; 3.0).</li>
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <h4>Decisiones de Diseño Justificadas:</h4>
+                                                <ol>
+                                                    <li>
+                                                        <strong>Validación Estricta de Notas (Tipo y Rango):</strong>
+                                                        <p><strong>Por qué se usó:</strong> Antes de cualquier cálculo, se verifica que cada elemento de la lista sea un número válido y que esté dentro del rango lógico (0 a 5). Esto es crucial para la integridad de los resultados, evitando promedios erróneos por datos inválidos y proporcionando retroalimentación clara al usuario sobre el formato esperado.</p>
+                                                    </li>
+                                                    <li>
+                                                        <strong>Uso de `reduce()` para la Suma de Notas:</strong>
+                                                        <p><strong>Por qué se usó:</strong> Se eligió el método `reduce()` para calcular la suma de las notas. Es una forma más funcional, concisa y declarativa de expresar esta operación en comparación con un bucle `for` tradicional, lo que mejora la legibilidad y mantenibilidad del código al comunicar claramente la intención de "reducir" el arreglo a un valor acumulado.</p>
+                                                    </li>
+                                                </ol>
+                                            </div>
+                                        </details>        </section>
+
+        <section id="ejercicio4" class="ejercicio">
+            <h2>Ejercicio 4: Ordenamiento de Precios</h2>
+            <form id="form-ejercicio4">
+                <div>
+                    <label for="precios4">Lista de precios (separados por coma):</label>
+                    <input type="text" id="precios4" name="precios4" placeholder="Ej: 1500,3000,800.50" required>
+                </div>
+                <button type="submit">Ordenar y Analizar</button>
+            </form>
+            <div id="resultado4" class="resultado" style="display:none;"></div>
+            <details>
+                <summary>Ver Documentación Técnica</summary>
+                <div>
+                    <h4>Entradas</h4>
+                    <ul>
+                        <li><strong>Lista de precios:</strong> Un texto con precios numéricos positivos, separados por comas (ej: "1500, 3000, 800.50").</li>
+                    </ul>
+                    <h4>Proceso</h4>
+                    <p>El texto de entrada se convierte en un arreglo de números. Se valida que cada precio sea un número positivo. Luego, el arreglo se ordena de mayor a menor. El precio más alto se obtiene del primer elemento del arreglo ordenado y el más bajo del último.</p>
+                    <h4>Salidas</h4>
+                    <p>Una lista con los precios ordenados, el precio más alto y el precio más bajo.</p>
+                    <h4>Reglas de Negocio y Casos Límite</h4>
+                    <ul>
+                        <li><strong>Ordenamiento Numérico:</strong> El ordenamiento se hace de forma numérica (no alfabética) y en orden descendente (de mayor a menor).</li>
+                        <li><strong>Valores no válidos:</strong> Se rechazan valores negativos o no numéricos en la lista de precios.</li>
+                        <li><strong>Función Pura:</strong> La función de ordenamiento trabaja sobre una copia del arreglo para no modificar la lista original de precios (evita efectos secundarios).</li>
+                                                    <li><strong>Lista Vacía:</strong> Si la lista está vacía, se retorna un mensaje de error claro.</li>
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <h4>Decisiones de Diseño Justificadas:</h4>
+                                                <ol>
+                                                    <li>
+                                                        <strong>No Mutar el Arreglo Original (Copia con `...`):</strong>
+                                                        <p><strong>Por qué se usó:</strong> Se crea una copia superficial del arreglo de precios con el operador de propagación (`...precios`) antes de ordenarlo. Esto asegura que la función sea "pura", es decir, que no modifique los datos originales pasados como argumento. Es una buena práctica para prevenir efectos secundarios no deseados en otras partes del código que puedan depender del arreglo original sin ordenar.</p>
+                                                    </li>
+                                                    <li>
+                                                        <strong>Función de Comparación Explicita en `sort()` (`(a, b) => b - a`):</strong>
+                                                        <p><strong>Por qué se usó:</strong> El método `sort()` de JavaScript, por defecto, ordena los elementos como cadenas de texto. Para ordenar números de forma correcta y en orden descendente (mayor a menor), es fundamental proporcionar una función de comparación explícita (`(a, b) => b - a`). Esto garantiza un ordenamiento numérico preciso y cumple el requisito del ejercicio de manera robusta.</p>
+                                                    </li>
+                                                </ol>
+                                            </div>
+                                        </details>        </section>
+
+        <section id="ejercicio5" class="ejercicio">
+            <h2>Ejercicio 5: Validación de Usuario y Permisos</h2>
+            <form id="form-ejercicio5">
+                <div>
+                    <label for="estado5">Estado del usuario:</label>
+                    <select id="estado5" name="estado5">
+                        <option value="activo">Activo</option>
+                        <option value="inactivo">Inactivo</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="rol5">Rol del usuario:</label>
+                    <select id="rol5" name="rol5">
+                        <option value="admin">Admin</option>
+                        <option value="editor">Editor</option>
+                        <option value="lector">Lector</option>
+                        <option value="visitante">Visitante (Rol no válido)</option>
+                    </select>
+                </div>
+                <button type="submit">Validar Usuario</button>
+            </form>
+            <div id="resultado5" class="resultado" style="display:none;"></div>
+            <details>
+                <summary>Ver Documentación Técnica</summary>
+                <div>
+                    <h4>Entradas</h4>
+                    <ul>
+                        <li><strong>Estado del usuario:</strong> Selección desde un menú ('Activo' o 'Inactivo').</li>
+                        <li><strong>Rol del usuario:</strong> Selección desde un menú ('Admin', 'Editor', 'Lector', 'Visitante').</li>
+                    </ul>
+                    <h4>Proceso</h4>
+                    <p>La función primero comprueba si el estado del usuario es 'activo'. Si no lo es, deniega el acceso. Si está activo, comprueba el rol. Dependiendo del rol, asigna un mensaje de permisos específico. Si el rol no es reconocido, deniega el acceso.</p>
+                    <h4>Salidas</h4>
+                    <p>Un mensaje indicando si el acceso es 'Permitido' o 'Denegado', junto con un detalle de los permisos o la razón del rechazo.</p>
+                    <h4>Reglas de Negocio y Casos Límite</h4>
+                    <ul>
+                        <li><strong>Usuario Activo es Requerido:</strong> Es la primera y más importante validación. Un usuario 'inactivo' nunca tiene acceso, sin importar su rol.</li>
+                        <li><strong>Manejo de Roles:</strong> Se utiliza una estructura <code>switch</code> para asignar permisos de forma clara y organizada según el rol.</li>
+                                                    <li><strong>Rol no Válido:</strong> Cualquier rol que no sea 'admin', 'editor' o 'lector' es considerado no válido y se le deniega el acceso. Esto previene que roles futuros o incorrectos obtengan permisos por accidente.</li>
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <h4>Decisiones de Diseño Justificadas:</h4>
+                                                <ol>
+                                                    <li>
+                                                        <strong>Normalización de Entradas de Texto (`trim().toLowerCase()`):</strong>
+                                                        <p><strong>Por qué se usó:</strong> Para asegurar que la validación del estado y el rol del usuario sea robusta e insensible a las variaciones en mayúsculas/minúsculas o a los espacios en blanco accidentales. Esto estandariza las entradas y reduce la probabilidad de errores lógicos debido a inconsistencias en el formato de los datos.</p>
+                                                    </li>
+                                                    <li>
+                                                        <strong>Uso de la Declaración `switch` para Manejo de Roles:</strong>
+                                                        <p><strong>Por qué se usó:</strong> Para manejar los diferentes roles de usuario de manera clara y organizada. Un `switch` es más legible y eficiente que una serie de `if/else if` anidados cuando se compara una misma variable (el rol) con múltiples valores posibles. Además, el caso `default` permite gestionar de forma segura y explícita los roles no reconocidos.</p>
+                                                    </li>
+                                                </ol>
+                                            </div>
+                                        </details>        </section>
+
+        <section id="ejercicio6" class="ejercicio">
+            <h2>Ejercicio 6: Cálculo Modular de Nómina</h2>
+            <p>Calcula el salario neto de un trabajador a partir del valor por hora y las horas trabajadas.</p>
+            <form id="form-ejercicio6">
+                <div>
+                    <label for="valorHora6">Valor por hora:</label>
+                    <input type="number" id="valorHora6" name="valorHora6" min="0" step="0.01" required>
+                </div>
+                <div>
+                    <label for="horasTrabajadas6">Horas trabajadas en el mes:</label>
+                    <input type="number" id="horasTrabajadas6" name="horasTrabajadas6" min="0" required>
+                </div>
+                <button type="submit">Calcular Nómina</button>
+            </form>
+            <div id="resultado6" class="resultado"></div>
+            <details>
+                <summary>Ver Documentación Técnica</summary>
+                <div>
+                    <h4>Entradas</h4>
+                    <ul>
+                        <li><strong>Valor por hora:</strong> Número positivo que representa el pago por hora.</li>
+                        <li><strong>Horas trabajadas en el mes:</strong> Número positivo de horas.</li>
+                    </ul>
+                    <h4>Proceso</h4>
+                    <p>Primero, se valida que ambas entradas sean números positivos. Se calcula el <strong>salario bruto</strong> multiplicando el valor por hora por las horas trabajadas. Luego, se calcula un <strong>total de deducciones</strong> aplicando una tasa fija del 8% al salario bruto. Finalmente, el <strong>salario neto</strong> se obtiene restando las deducciones del salario bruto.</p>
+                    <h4>Salidas</h4>
+                    <p>Un desglose del cálculo, mostrando el salario bruto, el total de deducciones y el salario neto final.</p>
+                    <h4>Reglas de Negocio y Casos Límite</h4>
+                    <ul>
+                        <li><strong>Valores Positivos:</strong> El cálculo solo se realiza si tanto las horas como el valor por hora son números positivos. Entradas negativas o no numéricas generan un error.</li>
+                        <li><strong>Modelo de Deducción Fijo:</strong> Se usa una tasa fija del 8% (representando 4% de salud y 4% de pensión) como un modelo simplificado para fines educativos.</li>
+                                                    <li><strong>Salida Detallada:</strong> En lugar de mostrar solo el resultado final, se muestra el desglose completo para dar transparencia al proceso de cálculo.</li>
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <h4>Decisiones de Diseño Justificadas:</h4>
+                                                <ol>
+                                                    <li>
+                                                        <strong>Modelo de Deducciones Simplificado y Fijo:</strong>
+                                                        <p><strong>Por qué se usó:</strong> Para este ejercicio introductorio, se optó por un porcentaje fijo del 8% para las deducciones (representando el 4% de salud y el 4% de pensión). Esta simplificación permite demostrar el concepto de deducciones de nómina de forma clara y sin introducir la complejidad de las leyes fiscales reales, haciendo el ejemplo más didáctico y fácil de entender.</p>
+                                                    </li>
+                                                    <li>
+                                                        <strong>Retorno de Objeto Detallado (Desglose del Salario):</strong>
+                                                        <p><strong>Por qué se usó:</strong> En lugar de solo devolver el salario neto, la función `calcularNomina` retorna un objeto que incluye el salario bruto, el monto de las deducciones y el salario neto. Esta decisión mejora la transparencia y la utilidad, ya que la interfaz puede mostrar un desglose completo al usuario, lo que es mucho más informativo que un simple número final y permite ver paso a paso el cálculo.</p>
+                                                    </li>
+                                                </ol>
+                                            </div>
+                                        </details>        </section>
+    </main>
+
+    <script src="app.js" type="module"></script>
 </body>
 </html>
