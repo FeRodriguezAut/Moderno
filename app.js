@@ -191,4 +191,84 @@ document.addEventListener('DOMContentLoaded', () => {
             resultadoDiv.style.display = 'block';
         });
     }
+
+    // EJERCICIO 8: Búsqueda avanzada en un catálogo
+    const form8 = document.getElementById('form-ejercicio8');
+    if (form8) {
+        // Catálogo de cursos predefinido para el ejercicio 8
+        const miCatalogo = [
+            { nombre: "Introducción a JS", categoria: "Programación", duracion: 10, etiquetas: ["frontend", "web"] },
+            { nombre: "Diseño UX/UI", categoria: "Diseño", duracion: 25, etiquetas: ["usabilidad", "interfaz"] },
+            { nombre: "Python para Data Science", categoria: "Programación", duracion: 40, etiquetas: ["backend", "datos"] },
+            { nombre: "Fundamentos de Marketing Digital", categoria: "Marketing", duracion: 15, etiquetas: ["estrategia", "seo"] },
+            { nombre: "Diseño Web Responsivo", categoria: "Diseño", duracion: 30, etiquetas: ["frontend", "css"] },
+            { nombre: "Bases de Datos con SQL", categoria: "Programación", duracion: 20, etiquetas: ["backend", "datos"] },
+            { nombre: "Animación 3D", categoria: "Diseño", duracion: 35, etiquetas: ["graficos", "multimedia"] },
+            { nombre: "Desarrollo Móvil con React Native", categoria: "Programación", duracion: 50, etiquetas: ["movil", "frontend"] },
+        ];
+
+        const catalogoDisplayDiv = document.getElementById('catalogoDisplay8');
+        // Mostrar el catálogo inicial
+        const displayCatalogo = (catalogo) => {
+            catalogoDisplayDiv.textContent = JSON.stringify(catalogo, null, 2);
+        };
+        displayCatalogo(miCatalogo);
+
+        form8.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const criterioTipo = document.getElementById('criterioTipo8').value;
+            const criterioValor = document.getElementById('criterioValor8').value.trim();
+            const resultadoDiv = document.getElementById('resultado8');
+
+            let callbackBusqueda;
+            let errorMensaje = '';
+
+            // Construcción dinámica del callback de búsqueda
+            switch (criterioTipo) {
+                case 'categoria':
+                    if (criterioValor) {
+                        callbackBusqueda = curso => curso.categoria.toLowerCase() === criterioValor.toLowerCase();
+                    } else {
+                        errorMensaje = "Por favor, ingresa una categoría para buscar.";
+                    }
+                    break;
+                case 'duracionMayor':
+                    const duracionNum = parseInt(criterioValor, 10);
+                    if (!isNaN(duracionNum) && duracionNum >= 0) {
+                        callbackBusqueda = curso => curso.duracion > duracionNum;
+                    } else {
+                        errorMensaje = "Por favor, ingresa un número válido para la duración (mayor o igual a 0).";
+                    }
+                    break;
+                case 'nombreCoincide':
+                    if (criterioValor) {
+                        callbackBusqueda = curso => curso.nombre.toLowerCase().includes(criterioValor.toLowerCase());
+                    } else {
+                        errorMensaje = "Por favor, ingresa texto para buscar en el nombre.";
+                    }
+                    break;
+                default:
+                    errorMensaje = "Criterio de búsqueda no reconocido.";
+            }
+
+            if (errorMensaje) {
+                resultadoDiv.textContent = `Error: ${errorMensaje}`;
+                resultadoDiv.style.color = 'red';
+            } else {
+                // Llamar a la función principal de lógica para buscar cursos
+                const cursosFiltrados = buscarCursos(miCatalogo, callbackBusqueda);
+
+                // Mostrar el resultado en la interfaz
+                if (cursosFiltrados.length > 0) {
+                    const formattedResults = cursosFiltrados.map(curso => `- ${curso.nombre} (${curso.categoria}, ${curso.duracion}h)`).join('\n');
+                    resultadoDiv.innerHTML = `<strong>Cursos encontrados:</strong><pre>${formattedResults}</pre>`;
+                    resultadoDiv.style.color = 'green';
+                } else {
+                    resultadoDiv.textContent = 'No se encontraron cursos que coincidan con el criterio.';
+                    resultadoDiv.style.color = 'orange';
+                }
+            }
+            resultadoDiv.style.display = 'block';
+        });
+    }
 });
