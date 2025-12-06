@@ -1,54 +1,99 @@
 // ejercicio10.js
-// Este módulo se encarga de fusionar dos listas de usuarios provenientes de diferentes sistemas.
-// Su objetivo es crear una única lista consolidada, eliminando los usuarios duplicados
-// (identificados por su 'documento') y conservando la versión del usuario que contenga más información.
+// Fusiona dos listas de usuarios, eliminando duplicados y conservando la versión con más información.
 
-// Importa la librería 'prompt-sync' para poder pedir datos al usuario desde la terminal.
-// { sigint: true } permite terminar el programa con Ctrl+C.
-const prompt = require('prompt-sync')({ sigint: true });
+import promptSync from 'prompt-sync';
+const prompt = promptSync({ sigint: true });
 
 /**
  * @function fusionarUsuarios
- * @description Fusiona dos arrays de objetos usuario, eliminando duplicados por su propiedad 'documento'
- *              y conservando la versión del usuario que tiene más propiedades (mayor información).
- *
- * @param {Array<Object>} usuariosSistemaA - Array de objetos que representan usuarios del primer sistema.
- * @param {Array<Object>} usuariosSistemaB - Array de objetos que representan usuarios del segundo sistema.
- * @returns {Array<Object>} Un nuevo array con la lista final de usuarios, donde cada usuario es único
- *                          y, en caso de duplicidad, se conserva la versión más completa.
- *
- * @comment Esta función es fundamental para la integración de datos de diferentes fuentes.
- *          Fue diseñada para manejar la complejidad de la deduplicación de forma eficiente
- *          y con un criterio claro para la resolución de conflictos (mayor información).
+ * @description Fusiona dos arrays de objetos usuario, eliminando duplicados por 'documento'
+ *              y conservando la versión con más propiedades.
+ * @param {Array<Object>} usuariosSistemaA - Usuarios del primer sistema.
+ * @param {Array<Object>} usuariosSistemaB - Usuarios del segundo sistema.
+ * @returns {Array<Object>} Lista final de usuarios únicos y completos.
  */
 function fusionarUsuarios(usuariosSistemaA, usuariosSistemaB) {
-    // Comentario: Uso de Map para almacenamiento único y eficiente.
-    // Propósito: `Map` es ideal para esta tarea porque permite almacenar pares clave-valor,
-    // donde el 'documento' del usuario es la clave única. Esto facilita la verificación
-    // y actualización de usuarios existentes de forma rápida.
+    // Usar Map para almacenar usuarios únicos por documento.
     const usuariosUnicosMap = new Map();
 
-    // Comentario: Paso 1: Combinar todas las listas de usuarios usando el operador spread.
-    // Propósito: Crear una lista inicial que contenga todos los usuarios de ambos sistemas.
-    // El operador spread (`...`) es una forma concisa y legible de fusionar arrays.
+    // Combinar listas de usuarios usando el operador spread.
     const todosLosUsuarios = [...usuariosSistemaA, ...usuariosSistemaB];
 
-    // Comentario: Paso 2: Iterar sobre la lista combinada para procesar cada usuario.
-    // Propósito: Recorrer cada usuario en la lista combinada para identificar duplicados
-    // y aplicar la lógica de conservación del usuario con mayor información.
+    // Iterar sobre usuarios para deduplicar y resolver conflictos.
     todosLosUsuarios.forEach(usuario => {
-        // Obtenemos el 'documento' del usuario actual, que es nuestro identificador único.
+        // Obtener el identificador único del usuario.
         const documento = usuario.documento;
 
-        // Decisión de Diseño Justificada 1: Uso de Map para deduplicación eficiente.
-        // Elegimos Map sobre un objeto simple ({}) porque ofrece métodos más robustos y de mejor rendimiento
-        // para manejar colecciones de claves-valor, como verificar existencia (.has), obtener (.get) y establecer (.set) elementos.
-        // Además, las claves de Map pueden ser de cualquier tipo, lo que lo hace más flexible aunque aquí usemos strings.
-
-        // Comentario: Verificación y resolución de duplicados.
-        // Propósito: Si el usuario ya está en el mapa (duplicado), comparamos si el nuevo usuario
-        // tiene más propiedades que el existente. Si es así, lo actualizamos.
+        // Si el usuario ya existe, verificar si la nueva versión tiene más información.
         if (usuariosUnicosMap.has(documento)) {
             const usuarioExistente = usuariosUnicosMap.get(documento);
 
-            // Decisión de Diseño Justificada 2: Definir
+            // Si la nueva versión tiene más propiedades, actualizar.
+            if (Object.keys(usuario).length > Object.keys(usuarioExistente).length) {
+                usuariosUnicosMap.set(documento, usuario);
+            }
+        } else {
+            // Añadir nuevo usuario al Map.
+            usuariosUnicosMap.set(documento, usuario);
+        }
+    });
+
+    // Convertir Map a Array para el retorno.
+    return Array.from(usuariosUnicosMap.values());
+}
+
+// --- Interacción con el usuario en la terminal ---
+
+console.log("--- Ejercicio 10: Fusión de Usuarios con Operador Spread ---");
+
+let usuariosA = [];
+let usuariosB = [];
+
+// Función auxiliar para solicitar y validar la entrada JSON de usuarios.
+const obtenerYValidarUsuarios = (nombreSistema) => {
+    let inputValido = false;
+    let usuarios = [];
+    while (!inputValido) {
+        const inputStr = prompt(`Ingresa los usuarios del ${nombreSistema} en formato JSON (ej. [{"documento":"123","nombre":"Juan"}]): `);
+        try {
+            const tempUsuarios = JSON.parse(inputStr || '[]');
+            if (!Array.isArray(tempUsuarios)) {
+                console.log("Error: La entrada debe ser un array JSON válido.");
+                continue;
+            }
+            if (tempUsuarios.length > 0) {
+                // Validar que cada usuario tenga la propiedad 'documento'.
+                for (const user of tempUsuarios) {
+                    if (typeof user !== 'object' || user === null || !user.hasOwnProperty('documento')) {
+                        throw new Error(`Cada usuario en el ${nombreSistema} debe ser un objeto y tener una propiedad 'documento'.`);
+                    }
+                }
+            }
+            usuarios = tempUsuarios;
+            inputValido = true;
+        } catch (error) {
+            console.log(`Error en la entrada del ${nombreSistema}: ${error.message}. Por favor, inténtalo de nuevo.`);
+        }
+    }
+    return usuarios;
+};
+
+// Solicitar y validar usuarios del Sistema A.
+usuariosA = obtenerYValidarUsuarios('Sistema A');
+// Solicitar y validar usuarios del Sistema B.
+usuariosB = obtenerYValidarUsuarios('Sistema B');
+
+// Llamar a la función para fusionar usuarios.
+const resultadoFusion = fusionarUsuarios(usuariosA, usuariosB);
+
+// Mostrar el resultado de la fusión.
+if (resultadoFusion.length > 0) {
+    console.log("\n--- Lista Final de Usuarios Fusionados ---");
+    resultadoFusion.forEach(user => {
+        console.log(JSON.stringify(user));
+    });
+} else {
+    console.log("\nNo se encontraron usuarios para fusionar o todas las listas estaban vacías.");
+}
+
+console.log("--- Fin del Ejercicio 10 ---");
